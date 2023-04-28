@@ -1,11 +1,10 @@
 import React from "react";
-import cardPic from "../marvel_img/card.jpg";
 
-const Card = () => {
+const Card = ({ item }) => {
   return (
     <div className="card">
-      <img src={cardPic} alt="" />
-      <p>Hulk</p>
+      <img src={`${item.thumbnail.path}.${item.thumbnail.extension}`} alt="" />
+      <p>{item.name}</p>
     </div>
   );
 };
