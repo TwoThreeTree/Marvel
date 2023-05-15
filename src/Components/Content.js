@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Card from "./Card";
+import Cards from "./Cards";
 import axios from "axios";
 import { useState } from "react";
 import Navbar from "./Navbar";
@@ -9,11 +9,16 @@ const Content = () => {
   );
   const [items, setItem] = useState([]);
   const [search, setSearch] = useState("");
+  const [results, setResults] = useState([]);
+  const [hideShufferle, setHideShuffle] = useState(false);
+
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get(currentUrl);
-
+      setTotal(res.data.data.total);
+      console.log("requested");
       setItem(res.data.data.results);
     };
 
@@ -21,12 +26,33 @@ const Content = () => {
   }, [currentUrl]);
   return (
     <>
-      <Navbar search={search} setSearch={setSearch} />
+      <Navbar
+        setSearch={setSearch}
+        search={search}
+        results={results}
+        hideShufferle={hideShufferle}
+        setHideShuffle={setHideShuffle}
+        total={total}
+        items={results}
+        setItem={setItem}
+        setResults={setResults}
+        setCurrentUrl={setCurrentUrl}
+        currentUrl={currentUrl}
+      />
 
       <div className="content">
-        {items.map((item) => (
-          <Card key={item.id} item={item} />
-        ))}
+        {/* <Cards
+          items={items.filter((item) => {
+            return item.name.toLowerCase().includes(search.toLowerCase());
+          })}
+        /> */}
+        {results.length > 0 ? (
+          <>
+            <Cards items={results} />
+          </>
+        ) : (
+          <Cards items={items} />
+        )}
       </div>
     </>
   );
